@@ -1,65 +1,56 @@
 object FormMain: TFormMain
-  Left = 394
-  Height = 508
-  Top = 162
-  Width = 903
-  Caption = 'FormMain'
-  ClientHeight = 508
-  ClientWidth = 903
+  Left = 486
+  Height = 547
+  Top = 184
+  Width = 892
+  Caption = 'CrazzzyPeter Image Dither'
+  ClientHeight = 547
+  ClientWidth = 892
   OnCreate = FormCreate
   LCLVersion = '2.0.10.0'
   object PanelMain: TPanel
     Left = 0
-    Height = 464
+    Height = 502
     Top = 0
-    Width = 903
+    Width = 892
     Align = alClient
     BevelOuter = bvNone
     BorderWidth = 8
     ChildSizing.HorizontalSpacing = 4
-    ClientHeight = 464
-    ClientWidth = 903
+    ClientHeight = 502
+    ClientWidth = 892
     TabOrder = 0
     OnResize = PanelMainResize
     object PanelOrigin: TPanel
       Left = 8
-      Height = 448
+      Height = 486
       Top = 8
-      Width = 442
+      Width = 360
       Align = alLeft
       BevelOuter = bvNone
       ChildSizing.VerticalSpacing = 4
-      ClientHeight = 448
-      ClientWidth = 442
+      ClientHeight = 486
+      ClientWidth = 360
       TabOrder = 0
-      object Label1: TLabel
+      object ScrollBoxOrigin: TScrollBox
         Left = 0
-        Height = 15
-        Top = 0
-        Width = 442
-        Align = alTop
-        Caption = 'Origin'
-        ParentColor = False
-      end
-      object ScrollBox1: TScrollBox
-        Left = 0
-        Height = 429
+        Height = 467
         Top = 19
-        Width = 442
-        HorzScrollBar.Page = 438
+        Width = 360
+        HorzScrollBar.Page = 312
         HorzScrollBar.Tracking = True
-        VertScrollBar.Page = 270
+        VertScrollBar.Page = 272
         VertScrollBar.Tracking = True
         Align = alClient
-        ClientHeight = 408
-        ClientWidth = 438
+        ClientHeight = 463
+        ClientWidth = 356
         TabOrder = 0
+        OnPaint = ScrollBoxOriginPaint
         object ImageOrigin: TImage
           Left = -2
-          Height = 270
+          Height = 272
           Top = 0
-          Width = 480
-          AutoSize = True
+          Width = 314
           Picture.Data = {
             1754506F727461626C654E6574776F726B47726170686963AF0F030089504E47
             0D0A1A0A0000000D49484452000001E00000010E0806000000519AC467000020
@@ -6333,68 +6324,98 @@ object FormMain: TFormMain
             1F8FC45FA6848411D738FE3A7D85760E8C7352FB19FC0DEBB8FC0596C195B500
             00000049454E44AE426082
           }
+          Proportional = True
+          Stretch = True
         end
+      end
+      object LabelOrigin: TLabel
+        Left = 0
+        Height = 15
+        Top = 0
+        Width = 360
+        Align = alTop
+        Alignment = taCenter
+        Caption = 'Origin'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
       end
     end
     object PanelDither: TPanel
-      Left = 454
-      Height = 448
+      Left = 372
+      Height = 486
       Top = 8
-      Width = 441
+      Width = 512
       Align = alClient
       BevelOuter = bvNone
       ChildSizing.VerticalSpacing = 4
-      ClientHeight = 448
-      ClientWidth = 441
+      ClientHeight = 486
+      ClientWidth = 512
       TabOrder = 1
-      object ScrollBox2: TScrollBox
+      object ScrollBoxDither: TScrollBox
         Left = 0
-        Height = 429
+        Height = 467
         Top = 19
-        Width = 441
+        Width = 512
         HorzScrollBar.Page = 176
         HorzScrollBar.Tracking = True
         VertScrollBar.Page = 144
         VertScrollBar.Tracking = True
         Align = alClient
-        ClientHeight = 425
-        ClientWidth = 437
+        ClientHeight = 463
+        ClientWidth = 508
         TabOrder = 0
+        OnPaint = ScrollBoxDitherPaint
         object ImageDither: TImage
           Left = 0
           Height = 144
           Top = 0
           Width = 176
-          AutoSize = True
+          Proportional = True
+          Stretch = True
         end
       end
-      object Label2: TLabel
+      object LabelDither: TLabel
         Left = 0
         Height = 15
         Top = 0
-        Width = 441
+        Width = 512
         Align = alTop
+        Alignment = taCenter
         Caption = 'Dither'
+        Font.Style = [fsBold]
         ParentColor = False
+        ParentFont = False
       end
     end
   end
+  object Bevel4: TBevel
+    Left = 0
+    Height = 4
+    Top = 502
+    Width = 892
+    Align = alBottom
+    Shape = bsBottomLine
+    Style = bsRaised
+  end
   object Panel1: TPanel
     Left = 0
-    Height = 44
-    Top = 464
-    Width = 903
+    Height = 41
+    Top = 506
+    Width = 892
     Align = alBottom
     BevelOuter = bvNone
     BorderWidth = 8
     ChildSizing.HorizontalSpacing = 4
     ChildSizing.VerticalSpacing = 4
-    ClientHeight = 44
-    ClientWidth = 903
+    ClientHeight = 41
+    ClientWidth = 892
+    Color = clWindow
+    ParentColor = False
     TabOrder = 1
     object ButtonLoad: TButton
       Left = 8
-      Height = 28
+      Height = 25
       Top = 8
       Width = 75
       Align = alLeft
@@ -6404,7 +6425,7 @@ object FormMain: TFormMain
     end
     object ButtonSave: TButton
       Left = 87
-      Height = 28
+      Height = 25
       Top = 8
       Width = 75
       Align = alLeft
@@ -6412,15 +6433,100 @@ object FormMain: TFormMain
       OnClick = ButtonSaveClick
       TabOrder = 1
     end
+    object TrackBarDitherPower: TTrackBar
+      Left = 289
+      Height = 25
+      Top = 8
+      Width = 159
+      Frequency = 16
+      Max = 255
+      OnChange = TrackBarDitherPowerChange
+      Position = 127
+      ShowSelRange = False
+      Align = alLeft
+      TabOrder = 2
+    end
+    object CheckBoxScale: TCheckBox
+      Left = 174
+      Height = 25
+      Top = 8
+      Width = 63
+      Align = alLeft
+      AutoSize = False
+      Caption = 'Scale 2X'
+      OnChange = CheckBoxScaleChange
+      TabOrder = 3
+    end
+    object Bevel1: TBevel
+      Left = 166
+      Height = 25
+      Top = 8
+      Width = 4
+      Align = alLeft
+      Shape = bsLeftLine
+    end
+    object Bevel2: TBevel
+      Left = 452
+      Height = 25
+      Top = 8
+      Width = 4
+      Align = alLeft
+      Shape = bsLeftLine
+    end
+    object Bevel3: TBevel
+      Left = 241
+      Height = 25
+      Top = 8
+      Width = 4
+      Align = alLeft
+      Shape = bsLeftLine
+    end
+    object Label1: TLabel
+      Left = 249
+      Height = 25
+      Top = 8
+      Width = 36
+      Align = alLeft
+      Caption = 'Power:'
+      Layout = tlCenter
+      ParentColor = False
+    end
+    object ComboBoxPalette: TComboBox
+      Left = 503
+      Height = 22
+      Top = 8
+      Width = 177
+      Align = alLeft
+      DropDownCount = 16
+      ItemHeight = 16
+      OnChange = ComboBoxPaletteChange
+      OnDrawItem = ComboBoxPaletteDrawItem
+      Style = csOwnerDrawFixed
+      TabOrder = 4
+    end
+    object Label2: TLabel
+      Left = 460
+      Height = 25
+      Top = 8
+      Width = 39
+      Align = alLeft
+      Caption = 'Palette:'
+      Layout = tlCenter
+      ParentColor = False
+    end
   end
   object OpenPictureDialog: TOpenPictureDialog
     Filter = 'Графические файлы (*.png;*.xpm;*.bmp;*.cur;*.ico;*.icns;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.pbm;*.pgm;*.ppm;*.gif)|*.png;*.xpm;*.bmp;*.cur;*.ico;*.icns;*.jpeg;*.jpg;*.jpe;*.jfif;*.tif;*.tiff;*.gif;*.pbm;*.pgm;*.ppm;*.gif|Portable Network Graphic (*.png)|*.png|Pixmap (*.xpm)|*.xpm|Bitmaps (*.bmp)|*.bmp|Cursor (*.cur)|*.cur|Icon (*.ico)|*.ico|Mac OS X Icon (*.icns)|*.icns|Joint Picture Expert Group (*.jpeg;*.jpg;*.jpe;*.jfif)|*.jpeg;*.jpg;*.jpe;*.jfif|Tagged Image File Format (*.tif;*.tiff)|*.tif;*.tiff|Graphics Interchange Format (*.gif)|*.gif|Portable PixMap (*.pbm;*.pgm;*.ppm)|*.pbm;*.pgm;*.ppm|Animated GIF (*.gif)|*.gif|Все файлы (*.*)|*.*'
-    Left = 568
-    Top = 208
+    Left = 392
+    Top = 200
   end
   object SavePictureDialog: TSavePictureDialog
     Filter = 'PNG (*.png)|*.png'
-    Left = 568
-    Top = 272
+    Left = 496
+    Top = 200
+  end
+  object ImageListPalette: TImageList
+    Left = 520
+    Top = 338
   end
 end
