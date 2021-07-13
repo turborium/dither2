@@ -2,6 +2,8 @@
 
 Anime dither for real otaku!!! (^_^)
 
+Великолепно работает и собиреаться под LINUX!!! Спасибо Столманцу за это!  
+
 ![scr.png](scr.png)
 ![scr_pomoyka.png](scr_pomoyka.png)
 
