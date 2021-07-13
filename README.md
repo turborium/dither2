@@ -6,7 +6,9 @@ Anime dither for real otaku!!! (^_^)
 
 Загрузить скомпилированный exe-шник для ЛУЧШЕЙ ОС - WINDOWS: https://github.com/crazzzypeter/dither2/raw/main/dither2.exe
 
+Windows:  
 ![scr.png](scr.png)
+Linux:  
 ![scr_pomoyka.png](scr_pomoyka.png)
 
 
