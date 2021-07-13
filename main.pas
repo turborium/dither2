@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  ExtDlgs, ComCtrls, ComboEx, Types;
+  ExtDlgs, ComCtrls, Types;
 
 type
 
@@ -62,54 +62,6 @@ implementation
 
 uses
   Image32;
-
-type
-  TDitherPalette = array of TColor32;
-
-const
-  SolarEclipsePalette: array [0..3] of TColor32 = (
-    $FFFFFCFE,
-    $FFFFC200,
-    $FFFF2A00,
-    $FF11070A
-  );
-
-  Gray4Palette: array [0..3] of TColor32 = (
-    $FFFFFFFF,
-    $FFAAAAAA,
-    $FF777777,
-    $FF000000
-  );
-
-  Pollen8Palette: array [0..7] of TColor32 = (
-    $FF73464C,
-    $FFAB5675,
-    $FFEE6A7C,
-    $FFFFA7A5,
-    $FFFFE07E,
-    $FFFFE7D6,
-    $FF72DCBB,
-    $FF34ACBA
-  );
-
-  Pc88LowPalette: array [0..7] of TColor32 = (
-    $FF0000DB,
-    $FF00B6DB,
-    $FF00DB6D,
-    $FFFFB600,
-    $FFFF926D,
-    $FFDB0000,
-    $FFDBDBDB,
-    $FF000000
-  );
-
-  LemonLimegbPalette: array [0..3] of TColor32 = (
-    $FFcdb81b,
-    $FFafb525,
-    $FF87b133,
-    $FF5fad41
-  );
-
 
 type
   TPaletteEntry = record
@@ -299,8 +251,6 @@ const
       ]
     )
   ];
-
-
 
 {$R *.lfm}
 
@@ -518,20 +468,51 @@ end;
 procedure TFormMain.DitherImage;
 var
   Image: TImage32;
+  {$ifndef WINDOWS}
+  X, Y: Integer;
+  Color: TColor;
+  {$ifend}
 begin
   Image := TImage32.Create;
   try
     // load form origin image
     Image.SetSize(ImageOrigin.Picture.Bitmap.Width, ImageOrigin.Picture.Bitmap.Height);
+    // linux = ...
+    {$ifdef WINDOWS}
     Image.CopyFromDC(
       ImageOrigin.Picture.Bitmap.Canvas.Handle,
       Rect(0, 0, Image.Width, Image.Height)
     );
+    {$else}
+    ImageOrigin.Picture.Bitmap.BeginUpdate(True);
+    for Y := 0 to Image.Height - 1 do
+      for X := 0 to Image.Width - 1 do
+      begin
+        Color := ImageOrigin.Picture.Bitmap.Canvas.Pixels[X, Y];
+        Image.Pixel[X, Y] := Color32(255, Red(Color), Green(Color), Blue(Color));
+      end;
+    ImageOrigin.Picture.Bitmap.EndUpdate();
+    {$ifend}
+
     // dither
     FloydSteinbergDithering(Image, Palettes[ComboBoxPalette.ItemIndex].Palette, TrackBarDitherPower.Position);
     // load to dither image
     ImageDither.Picture.Bitmap.SetSize(Image.Width, Image.Height);
+    {$ifdef WINDOWS}
     Image.CopyToDc(ImageDither.Picture.Bitmap.Canvas.Handle, 0, 0, False);
+    {$else}
+    ImageDither.Picture.Bitmap.BeginUpdate(True);
+    for Y := 0 to Image.Height - 1 do
+      for X := 0 to Image.Width - 1 do
+      begin
+        ImageDither.Picture.Bitmap.Canvas.Pixels[X, Y] := RGBToColor(
+          TARGB(Image.Pixel[X, Y]).R,
+          TARGB(Image.Pixel[X, Y]).G,
+          TARGB(Image.Pixel[X, Y]).B
+        );
+      end;
+    ImageDither.Picture.Bitmap.EndUpdate();
+    {$ifend}
   finally
     Image.Free;
   end;
